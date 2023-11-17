@@ -2,9 +2,10 @@ package DTO;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
-
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
 @AllArgsConstructor
@@ -12,13 +13,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @Data
-public class User {
-    private int id;
-    private String username;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
-    private String phone;
-    private int userStatus;
+public class Category {
+    public int id;
+    public String name;
 }

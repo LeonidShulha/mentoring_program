@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class PostUserResponse {
+public class DefaultGetApiResponse {
     private int code;
     private String type;
     private String message;
