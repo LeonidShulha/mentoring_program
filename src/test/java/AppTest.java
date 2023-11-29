@@ -1,5 +1,8 @@
 import DTO.*;
 import Endpoints.ApiCallUtil;
+import io.restassured.config.ObjectMapperConfig;
+import io.restassured.config.RestAssuredConfig;
+import io.restassured.filter.log.LogDetail;
 import io.restassured.response.Response;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -7,6 +10,8 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
+import static io.restassured.RestAssured.given;
+import static io.restassured.mapper.ObjectMapperType.JACKSON_2;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -147,7 +152,7 @@ public class AppTest {
     }
 
     @Test
-    public void verifyUpladPetImage() {
+    public void verifyUploadPetImage() {
         Pet pet = Pet.builder()
                 .id(1)
                 .name("Pes Patron")
@@ -172,5 +177,65 @@ public class AppTest {
         softAssert.assertEquals(defaultGetApiResponse.getCode(), 200, "Unexpected code:");
         softAssert.assertEquals(defaultGetApiResponse.getType(), "unknown", "Unexpected type");
         softAssert.assertAll();
+    }
+
+    @Test
+    public void updatePetNameAndStatus(){
+        Pet pet = Pet.builder()
+                .id(2)
+                .name("Pes Patron")
+                .status("available")
+                .photoUrls(Collections.singletonList("test.com"))
+                .category(
+                        Category.builder()
+                                .id(2)
+                                .name("Dog")
+                                .build())
+                .tags(Collections.singletonList(
+                        Tag.builder()
+                                .id(2)
+                                .name("Tag1")
+                                .build()))
+                .build();
+        apiCallUtil.createPet(pet);
+        Response response = apiCallUtil.updatePetNameAndStatus(pet, "Pes Patron", "unknown");
+        response.then().spec(apiCallUtil.getResponseSpecification())
+                .assertThat().statusCode(200);
+        DefaultGetApiResponse defaultGetApiResponse = apiCallUtil.convertResponseToClass(response, DefaultGetApiResponse.class);
+        softAssert.assertEquals(defaultGetApiResponse.getMessage(), String.format("%s",pet.getId()), "Unexpected Message");
+        softAssert.assertEquals(defaultGetApiResponse.getCode(), 200, "Unexpected code:");
+        softAssert.assertEquals(defaultGetApiResponse.getType(), "unknown", "Unexpected type");
+        softAssert.assertAll();
+    }
+
+    @Test
+    public void deletePet(){
+        Pet pet = Pet.builder()
+                .id(1374)
+                .name("Pes Patron")
+                .status("available")
+                .photoUrls(Collections.singletonList("test.com"))
+                .category(
+                        Category.builder()
+                                .id(2)
+                                .name("Dog")
+                                .build())
+                .tags(Collections.singletonList(
+                        Tag.builder()
+                                .id(2)
+                                .name("Tag1")
+                                .build()))
+                .build();
+        apiCallUtil.createPet(pet).then().assertThat().statusCode(200);
+        apiCallUtil.getPet(pet).then().assertThat().statusCode(200);
+        Response response = apiCallUtil.deletePet(pet,"test_api_key");
+        response.then().spec(apiCallUtil.getResponseSpecification())
+                .assertThat().statusCode(200);
+        DefaultGetApiResponse defaultGetApiResponse = apiCallUtil.convertResponseToClass(response, DefaultGetApiResponse.class);
+        softAssert.assertEquals(defaultGetApiResponse.getMessage(), String.format("%s",pet.getId()), "Unexpected Message");
+        softAssert.assertEquals(defaultGetApiResponse.getCode(), 200, "Unexpected code:");
+        softAssert.assertEquals(defaultGetApiResponse.getType(), "unknown", "Unexpected type");
+        softAssert.assertAll();
+        apiCallUtil.getPet(pet).then().assertThat().statusCode(404);
     }
 }

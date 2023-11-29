@@ -86,8 +86,37 @@ public class ApiCallUtil {
                 .post();
     }
 
+    public Response updatePetNameAndStatus(Pet pet, String name, String status) {
+        return given().spec(requestSpecification)
+                .contentType("application/x-www-form-urlencoded")
+                .basePath("/pet/{petId}")
+                .pathParam("petId", pet.getId())
+                .formParam("name", name)
+                .formParam("status", status)
+                .post();
+    }
+
+    public Response deletePet(Pet pet, String apiKey){
+        return given().spec(requestSpecification)
+                .basePath("/pet/{petId}")
+                .pathParam("petId", pet.getId())
+                .header("api_key", apiKey)
+                .delete();
+    }
+
+    public Response getPet(Pet pet){
+        return given().spec(requestSpecification)
+                .basePath("/pet/{petId}")
+                .pathParam("petId", pet.getId())
+                .get();
+    }
+
     public static <T> T convertResponseToClass(Response response, Class<T> targetClass) {
-        return response.getBody().as(targetClass, JACKSON_2);
+        try {
+            return response.getBody().as(targetClass);
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Cannot cast response to class %s".formatted(targetClass));
+        }
     }
 
 }
