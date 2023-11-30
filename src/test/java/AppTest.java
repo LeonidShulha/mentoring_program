@@ -1,8 +1,5 @@
 import DTO.*;
 import Endpoints.ApiCallUtil;
-import io.restassured.config.ObjectMapperConfig;
-import io.restassured.config.RestAssuredConfig;
-import io.restassured.filter.log.LogDetail;
 import io.restassured.response.Response;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -10,8 +7,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import static io.restassured.RestAssured.given;
-import static io.restassured.mapper.ObjectMapperType.JACKSON_2;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -19,7 +14,7 @@ import java.util.List;
 
 
 public class AppTest {
-    private static final String SUCCESS_LOGIN = "logged in user sesson:" + "\\d+";
+    private static final String SUCCESS_LOGIN = "logged in user session:" + "\\d+";
     private static final String SUCCESS_FILE_UPLOAD = "File uploaded to (.*), (\\d+) bytes";
     private static SoftAssert softAssert;
     private ApiCallUtil apiCallUtil = new ApiCallUtil();
@@ -33,9 +28,9 @@ public class AppTest {
     @Test
     public void verifyUserCreation() {
         User user = User.builder()
-                .id(1)
+                .id(213452345)
                 .userStatus(0)
-                .username("testUser")
+                .username("testUserwrw")
                 .firstName("John")
                 .lastName("Doe")
                 .email("john_doe@mail.com")
@@ -70,9 +65,9 @@ public class AppTest {
     @Test
     public void verifyUserLogin() {
         User user = User.builder()
-                .id(1)
+                .id(23412345)
                 .userStatus(0)
-                .username("testUser")
+                .username("testUserwe")
                 .firstName("John")
                 .lastName("Doe")
                 .email("john_doe@mail.com")
@@ -93,7 +88,7 @@ public class AppTest {
     @Test
     public void verifyListOfUsersCreation() {
         User user = User.builder()
-                .id(1)
+                .id(34252)
                 .userStatus(0)
                 .username("testUser")
                 .firstName("John")
@@ -180,7 +175,7 @@ public class AppTest {
     }
 
     @Test
-    public void updatePetNameAndStatus(){
+    public void updatePetNameAndStatus() {
         Pet pet = Pet.builder()
                 .id(2)
                 .name("Pes Patron")
@@ -202,14 +197,14 @@ public class AppTest {
         response.then().spec(apiCallUtil.getResponseSpecification())
                 .assertThat().statusCode(200);
         DefaultGetApiResponse defaultGetApiResponse = apiCallUtil.convertResponseToClass(response, DefaultGetApiResponse.class);
-        softAssert.assertEquals(defaultGetApiResponse.getMessage(), String.format("%s",pet.getId()), "Unexpected Message");
+        softAssert.assertEquals(defaultGetApiResponse.getMessage(), String.format("%s", pet.getId()), "Unexpected Message");
         softAssert.assertEquals(defaultGetApiResponse.getCode(), 200, "Unexpected code:");
         softAssert.assertEquals(defaultGetApiResponse.getType(), "unknown", "Unexpected type");
         softAssert.assertAll();
     }
 
     @Test
-    public void deletePet(){
+    public void deletePet() {
         Pet pet = Pet.builder()
                 .id(1374)
                 .name("Pes Patron")
@@ -228,11 +223,11 @@ public class AppTest {
                 .build();
         apiCallUtil.createPet(pet).then().assertThat().statusCode(200);
         apiCallUtil.getPet(pet).then().assertThat().statusCode(200);
-        Response response = apiCallUtil.deletePet(pet,"test_api_key");
+        Response response = apiCallUtil.deletePet(pet, "test_api_key");
         response.then().spec(apiCallUtil.getResponseSpecification())
                 .assertThat().statusCode(200);
         DefaultGetApiResponse defaultGetApiResponse = apiCallUtil.convertResponseToClass(response, DefaultGetApiResponse.class);
-        softAssert.assertEquals(defaultGetApiResponse.getMessage(), String.format("%s",pet.getId()), "Unexpected Message");
+        softAssert.assertEquals(defaultGetApiResponse.getMessage(), String.format("%s", pet.getId()), "Unexpected Message");
         softAssert.assertEquals(defaultGetApiResponse.getCode(), 200, "Unexpected code:");
         softAssert.assertEquals(defaultGetApiResponse.getType(), "unknown", "Unexpected type");
         softAssert.assertAll();
