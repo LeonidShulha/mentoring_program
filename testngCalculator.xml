@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="AllCalculatorTests" verbose="1" parallel="tests" thread-count="3">
+    <test name="CalculatorTestSuite" >
+        <packages>
+            <package name="CalculatorTests.*" />
+        </packages>
+    </test>
+</suite>
