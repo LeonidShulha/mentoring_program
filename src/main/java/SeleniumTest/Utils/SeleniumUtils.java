@@ -2,6 +2,7 @@ package SeleniumTest.Utils;
 
 import lombok.SneakyThrows;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.FluentWait;
 
@@ -41,5 +42,12 @@ public class SeleniumUtils {
                 .filter(item -> pageUrl.contains(item.getDomen()))
                 .map(ElementLocators::getPath)
                 .toList();
+    }
+
+    public void navigateToTab(int tabNumber){
+        getDriver().switchTo().window(getDriver().getWindowHandles().stream()
+                .toList()
+                .get(tabNumber)
+        );
     }
 }
