@@ -14,4 +14,3 @@ public abstract class AbstractPage {
                 .forEach(item -> javaScriptExecutorUtils.closeViaJsExecutor(item));
     }
 }
-
