@@ -15,21 +15,43 @@ public class ChromeConfigProductPage extends AbstractPage {
     private static final String CONFIG_TAB_TITLE_XPATH = "//h1[@aria-label='Selected product title']";
     private static final String PRODUCT_CALCULATED_PRICE_XPATH = CONFIG_TAB_TITLE_XPATH + "/following-sibling::*[2]/span[1]";
     private static final String ADVANCED_SETTING_TOGGLE_XPATH = "//h2[contains(text(), 'Instances')]/following-sibling::div//button";
-    private static final String NUMBER_OF_INSTANCES_INPUT_FIELD_XPATH = "//div[text()='Number of Instances']/parent::*/following-sibling::div//label";
+    private static final String NUMBER_OF_INSTANCES_INPUT_FIELD_XPATH = "//div[text()='Number of Instances']/parent::*/following-sibling::div//label/input";
     private static final String REGULAR_PROVISIONING_MODEL_SELECTION_XPATH = "//label[text()='Regular']";
     private static final String NUMBER_OF_CPU_SLIDER = "(//div[@jsname = 'PFprWc'])[1]";
     private static final String ADD_GPU_TOGGLE = "//*[text()='Add GPUs']//parent::div/preceding-sibling::div//button";
     private static final String COMMITTED_USAGE_1_YEAR_BUTTON_CSS = "input[type='radio'][id='1-year']";
 
-    private ChromeDropdown serviceType = new ChromeDropdown("Service type");
-    private ChromeDropdown operatingSystem = new ChromeDropdown("Operating System / Software");
-    private ChromeDropdown machineType = new ChromeDropdown("Machine type");
-    private ChromeDropdown gpuModel = new ChromeDropdown("GPU Model");
-    private ChromeDropdown numberOfGpus = new ChromeDropdown("Number of GPUs");
-    private ChromeDropdown localSsd = new ChromeDropdown("Local SSD");
-    private ChromeDropdown region = new ChromeDropdown("Region");
+    public ChromeDropdown getServiceType() {
+        return new ChromeDropdown("Service type");
+    }
 
-    private WebElement advancedSettingsToggle() { return getDriver().findElement(By.xpath(ADVANCED_SETTING_TOGGLE_XPATH)); }
+    public ChromeDropdown getOperatingSystem() {
+        return new ChromeDropdown("Operating System / Software");
+    }
+
+    public ChromeDropdown getMachineType() {
+        return new ChromeDropdown("Machine type");
+    }
+
+    public ChromeDropdown getGpuModel() {
+        return new ChromeDropdown("GPU Model");
+    }
+
+    public ChromeDropdown getNumberOfGpus() {
+        return new ChromeDropdown("Number of GPUs");
+    }
+
+    public ChromeDropdown getLocalSsd() {
+        return new ChromeDropdown("Local SSD");
+    }
+
+    public ChromeDropdown getRegion() {
+        return new ChromeDropdown("Region");
+    }
+
+    private WebElement advancedSettingsToggle() {
+        return getDriver().findElement(By.xpath(ADVANCED_SETTING_TOGGLE_XPATH));
+    }
 
     private WebElement addGpusToggle() {
         return getDriver().findElement(By.xpath(ADD_GPU_TOGGLE));

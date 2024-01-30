@@ -37,10 +37,7 @@ public class PasteBinPage extends AbstractPage {
         return getDriver().findElement(By.xpath(CREATE_PASTE_BUTTON_XPATH));
     }
 
-//    public void closeBanners() {
-//        List<String> elements = Arrays.asList(POLICY_POPUP_AGREE_BUTTON_XPATH, HIDE_SLIDE_BANNER_BUTTON_XPATH);
-//        elements.forEach(item -> closeUnexpectedElementIfAppears(By.xpath(item)));
-//    }
+
 
     public void setNewPasteInputFieldText(String text) {
         pasteInputField().click();

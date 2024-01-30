@@ -7,7 +7,7 @@ var clickButton = document.evaluate(element, document, null, XPathResult.FIRST_O
         if (new Date().getTime() - startTime > timeout) {
             console.log('Timed out waiting for element');
         } else {
-            setTimeout(checkIfElemExists, 500);
+            (checkIfElemExists, 500);
             console.log('Element not found, waiting...');
         }
     } else {

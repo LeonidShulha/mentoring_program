@@ -2,11 +2,11 @@ package SeleniumTest.Utils;
 
 import lombok.SneakyThrows;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.FluentWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,10 +44,19 @@ public class SeleniumUtils {
                 .toList();
     }
 
-    public void navigateToTab(int tabNumber){
-        getDriver().switchTo().window(getDriver().getWindowHandles().stream()
-                .toList()
-                .get(tabNumber)
-        );
+    @SneakyThrows
+    public void navigateToTab(int tabNumber) {
+        try {
+            Thread.sleep(1000);
+        }
+        catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
+        String webDriverToString = getDriver().toString();
+        List<String> windowHandles = new ArrayList<>(getDriver().getWindowHandles());
+        if (webDriverToString.toLowerCase().contains("safari")) {
+            tabNumber = windowHandles.size() - 1 - tabNumber;
+        }
+        getDriver().switchTo().window(windowHandles.get(tabNumber));
     }
 }

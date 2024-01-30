@@ -1,33 +1,37 @@
 package SeleniumTest.Utils;
 
+import lombok.SneakyThrows;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 
 import static SeleniumTest.ThreadLocalDriver.getDriver;
 
 public class JavaScriptExecutorUtils {
 
-    public void closeViaJsExecutor(String locator){
+    public void closeViaJsExecutor(String locator) {
         JavascriptExecutor executor = (JavascriptExecutor) getDriver();
         try {
             Path filePath = Paths.get("src/main/resources/JsScriptToCloseModal.js");
             String content = new String(Files.readAllBytes(filePath)).formatted(locator);
             executor.executeScript(content);
         } catch (Exception e) {
-            System.out.println("Element with locator '%s' is not found");
+            System.out.println("Element with locator '%s' is not found".formatted(locator));
         }
     }
+
+    @SneakyThrows
     public WebElement scrollToElement(WebElement element) {
         JavascriptExecutor jse = (JavascriptExecutor) getDriver();
         jse.executeScript("window.scrollTo(0, 0)");
         while (!element.isEnabled()) {
             jse.executeScript("arguments[0].scrollIntoView(true);", element);
         }
+        Thread.sleep(Duration.ofSeconds(3).toMillis());
         return element;
     }
 
