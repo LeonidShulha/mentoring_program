@@ -1,41 +1,40 @@
-package CalculatorTests;
+package unitTests;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.function.Function;
 
-public class DoubleSqrtTest extends CalculatorTestBase {
-    private final String GENERAL_TEST_TITLE = "Square root of double: ";
+
+public class DoubleSinTest extends CalculatorTestBase {
+    private final String GENERAL_TEST_TITLE = "Sine of double: ";
 
     @Override
     Function<Double[], Double> getFunction() {
-        return input -> calculator.sqrt(input[0]);
+        return input -> calculator.sin(input[0]);
     }
 
     @Override
     Function<Object[], ?> getNegativeFunction() {
-        return input -> calculator.sqrt(Double.parseDouble(input[0].toString()));
+        return input -> calculator.sin(Double.parseDouble(input[0].toString()));
     }
 
     @Test(testName = GENERAL_TEST_TITLE + POSITIVE, dataProvider = POSITIVE_DATA)
-    public void testDoubleSqrt(double a, double expected) {
+    public void testDoubleSin(double a, double expected) {
         positiveTest(new Double[]{a}, expected, getFunction());
     }
 
-    @Test(dataProvider = NEGATIVE_DATA, testName = GENERAL_TEST_TITLE + NEGATIVE)
-    public void testDoubleSqrtNegative(Object a, Class<? extends Throwable> expectedException) {
+    @Test(testName = GENERAL_TEST_TITLE + NEGATIVE, dataProvider = NEGATIVE_DATA)
+    public void testDoubleSinNegative(Object a, Class<? extends Throwable> expectedException) {
         negativeTest(new Object[]{a}, expectedException, getNegativeFunction());
     }
 
     @DataProvider
     public Object[][] positiveData() {
         return new Object[][]{
-                {4.0, 2.0},
                 {0.0, 0.0},
-                {25.0, 5.0},
-                {1.0, 1.0},
-                {0.09, 0.3},
+                {Math.PI / 2, 1.0},
+                {3 * Math.PI / 2, -1.0}
         };
     }
 

@@ -1,4 +1,4 @@
-package CalculatorTests;
+package unitTests;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

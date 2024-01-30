@@ -1,3 +1,5 @@
+package uiTests;
+
 import SeleniumTest.Chrome.Components.AddEstimatePopupWindow;
 import SeleniumTest.Chrome.Components.EstimateDetailsPopup;
 import SeleniumTest.Chrome.Pages.ChromeCloudHomePage;
@@ -82,7 +84,7 @@ public class GoogleCloudTest extends BaseUiTest {
         Assert.assertTrue(getDriver().findElement(By.xpath("//div/h4[text()='Cost Estimate Summary']")).isDisplayed(), "Page title is not loaded");
         getDriver().close();// close tab 2
         getDriver().switchTo().window(tab_1);
-        sidePanel.getOpenDetailedView().click(); // Click Open Detailed view
+        sidePanel.getOpenDetailedView().click();// Click Open Detailed view
         seleniumUtils.navigateToTab(1);// Get already opened tab
         Assert.assertTrue(getDriver().findElement(By.xpath("//div/h4[text()='Cost Estimate Summary']")).isDisplayed(), "Page title is not loaded");
     }
