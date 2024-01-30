@@ -1,84 +1,65 @@
 package SeleniumTest;
 
+import framework.config.TestConfig;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import lombok.SneakyThrows;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.safari.SafariOptions;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 
 public class ThreadLocalDriver {
-    private static ThreadLocal<WebDriver> threadDriver = new ThreadLocal();
+    private static ThreadLocal<RemoteWebDriver> threadDriver = new ThreadLocal();
+    private static boolean isRemoteRun = Boolean.parseBoolean(TestConfig.getProperties().getProperty("remoteRun"));
+    private static String browser = TestConfig.getProperties().getProperty("browser");
+    private static String gridHubUrl = TestConfig.getProperties().getProperty("urlGrid.Hub");
 
-    public ThreadLocalDriver() {
-    }
-
+    @SneakyThrows
     public static WebDriver getDriver() {
         if (threadDriver.get() == null) {
             initDriver();
         }
-
-        return (WebDriver) threadDriver.get();
+        return threadDriver.get();
     }
 
-    private static void initDriver() {
-        String browser = System.getProperty("browser", "chrome");
-        byte var2 = -1;
-        switch (browser.hashCode()) {
-            case -1361128838:
-                if (browser.equals("chrome")) {
-                    var2 = 0;
+    private static void initDriver() throws MalformedURLException {
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setBrowserName(browser);
+        if (isRemoteRun) {
+            threadDriver.set(new RemoteWebDriver(new URL(gridHubUrl), capabilities));
+        } else {
+            switch (browser.toLowerCase()) {
+                case "chrome" -> {
+                    WebDriverManager.chromedriver().setup();
+                    ChromeOptions chromeOptions = new ChromeOptions();
+                    threadDriver.set(new ChromeDriver(chromeOptions));
                 }
-                break;
-            case -849452327:
-                if (browser.equals("firefox")) {
-                    var2 = 1;
+                case "firefox" -> {
+                    WebDriverManager.firefoxdriver().setup();
+                    FirefoxOptions firefoxOptions = new FirefoxOptions();
+                    threadDriver.set(new FirefoxDriver(firefoxOptions));
                 }
-                break;
-            case 2332:
-                if (browser.equals("IE")) {
-                    var2 = 3;
+                case "safari" -> {
+                    SafariOptions safariOptions = new SafariOptions();
+                    WebDriverManager.safaridriver().setup();
+                    threadDriver.set(new SafariDriver(safariOptions));
                 }
-                break;
-            case 3108285:
-                if (browser.equals("edge")) {
-                    var2 = 2;
-                }
-                break;
-            case 105948115:
-                if (browser.equals("opera")) {
-                    var2 = 4;
-                }
+                default -> throw new IllegalArgumentException("Invalid browser property set: " + browser);
+            }
         }
-
-        switch (var2) {
-            case 0:
-                WebDriverManager.chromedriver().setup();
-                threadDriver.set(new ChromeDriver());
-
-                break;
-            case 1:
-                WebDriverManager.firefoxdriver().setup();
-                threadDriver.set(new FirefoxDriver());
-                break;
-            case 2:
-                WebDriverManager.edgedriver().setup();
-                threadDriver.set(new EdgeDriver());
-                break;
-            case 3:
-                WebDriverManager.iedriver().setup();
-                threadDriver.set(new InternetExplorerDriver());
-                break;
-            default:
-                throw new IllegalArgumentException("Entered browser value is not recognized");
-        }
-
-        ((WebDriver) threadDriver.get()).manage().window().maximize();
-        ((WebDriver) threadDriver.get()).manage().timeouts().pageLoadTimeout(Duration.ofSeconds(100));
-        ((WebDriver) threadDriver.get()).manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
-        ((WebDriver) threadDriver.get()).manage().timeouts().setScriptTimeout(Duration.ofSeconds(10));
+        threadDriver.get().manage().window().maximize();
+        threadDriver.get().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(100));
+        threadDriver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        threadDriver.get().manage().timeouts().setScriptTimeout(Duration.ofSeconds(10));
     }
 
     public static void killDriver() {
@@ -87,6 +68,5 @@ public class ThreadLocalDriver {
             threadDriver.get().quit();
             threadDriver.remove();
         }
-
     }
 }

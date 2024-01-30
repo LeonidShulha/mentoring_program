@@ -1,3 +1,5 @@
+package apiTests;
+
 import DTO.*;
 import Endpoints.ApiCallUtil;
 import io.restassured.response.Response;
