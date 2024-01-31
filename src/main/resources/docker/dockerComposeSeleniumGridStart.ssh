@@ -1,0 +1,1 @@
+docker-compose -f grid.yml up --scale chrome=2 --scale firefox=1
