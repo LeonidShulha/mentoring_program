@@ -66,6 +66,7 @@ public class GoogleCloudTest extends BaseUiTest {
         softAssert.assertAll();
     }
 
+
     @Test
     public void navigateBetweenTabs() {
         getDriver().navigate().to(CLOUD_PRICING_CALCULATOR_URL);
