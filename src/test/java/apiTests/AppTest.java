@@ -21,7 +21,6 @@ public class AppTest {
     private static SoftAssert softAssert;
     private ApiCallUtil apiCallUtil = new ApiCallUtil();
 
-
     @BeforeMethod
     public void initSoftAssert() {
         softAssert = new SoftAssert();

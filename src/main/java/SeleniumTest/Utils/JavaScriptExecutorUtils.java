@@ -11,14 +11,14 @@ import java.time.Duration;
 
 import static SeleniumTest.ThreadLocalDriver.getDriver;
 
+
 public class JavaScriptExecutorUtils {
 
     public void closeViaJsExecutor(String locator) {
-        JavascriptExecutor executor = (JavascriptExecutor) getDriver();
         try {
             Path filePath = Paths.get("src/main/resources/JsScriptToCloseModal.js");
             String content = new String(Files.readAllBytes(filePath)).formatted(locator);
-            executor.executeScript(content);
+            getExecutor().executeScript(content);
         } catch (Exception e) {
             System.out.println("Element with locator '%s' is not found".formatted(locator));
         }
@@ -26,20 +26,26 @@ public class JavaScriptExecutorUtils {
 
     @SneakyThrows
     public WebElement scrollToElement(WebElement element) {
-        JavascriptExecutor jse = (JavascriptExecutor) getDriver();
-        jse.executeScript("window.scrollTo(0, 0)");
+        getExecutor().executeScript("window.scrollTo(0, 0)");
         while (!element.isEnabled()) {
-            jse.executeScript("arguments[0].scrollIntoView(true);", element);
+            getExecutor().executeScript("arguments[0].scrollIntoView(true);", element);
         }
         Thread.sleep(Duration.ofSeconds(3).toMillis());
         return element;
     }
 
     public WebElement scrollToElementInScrollableArea(WebElement scrollableAreaElement, WebElement targetElement) {
-        JavascriptExecutor jse = (JavascriptExecutor) getDriver();
         while (!targetElement.isEnabled()) {
-            jse.executeScript("arguments[0].scrollTop = arguments[1].offsetTop;", scrollableAreaElement, targetElement);
+            getExecutor().executeScript("arguments[0].scrollTop = arguments[1].offsetTop;", scrollableAreaElement, targetElement);
         }
         return targetElement;
+    }
+
+    public void highlightElement(WebElement element) {
+        getExecutor().executeScript("var ele=arguments[0]; setTimeout(function() { ele.style.border='3px solid red'; }, 500)", element);
+    }
+
+    private JavascriptExecutor getExecutor() {
+        return (JavascriptExecutor) getDriver();
     }
 }

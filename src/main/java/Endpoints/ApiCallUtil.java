@@ -96,7 +96,7 @@ public class ApiCallUtil {
                 .post();
     }
 
-    public Response deletePet(Pet pet, String apiKey){
+    public Response deletePet(Pet pet, String apiKey) {
         return given().spec(requestSpecification)
                 .basePath("/pet/{petId}")
                 .pathParam("petId", pet.getId())
@@ -104,7 +104,7 @@ public class ApiCallUtil {
                 .delete();
     }
 
-    public Response getPet(Pet pet){
+    public Response getPet(Pet pet) {
         return given().spec(requestSpecification)
                 .basePath("/pet/{petId}")
                 .pathParam("petId", pet.getId())
